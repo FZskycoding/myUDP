@@ -54,15 +54,12 @@ class Ui_MainWindow(object):
         self.hostIPLayout.setObjectName("hostIPLayout")
         self.LineEdit_hostIP = QtWidgets.QLineEdit(self.verticalLayoutWidget_5)
         self.LineEdit_hostIP.setObjectName("LineEdit_hostIP")
-        # self.LineEdit_hostIP.setGeometry(QtCore.QRect(10, 20, 237, 29))
         self.hostIPLayout.addWidget(self.LineEdit_hostIP)
         self.verticalLayout_COM_select.addLayout(self.hostIPLayout)
         
-
+        #COM_Select.....連接按鈕&查詢按鈕
         self.horizontalLayout_COM_Select_btn = QtWidgets.QHBoxLayout()
         self.horizontalLayout_COM_Select_btn.setObjectName("horizontalLayout_COM_Select_btn")
-        
-        #COM_Select.....連接按鈕&查詢按鈕
         spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_COM_Select_btn.addItem(spacerItem1)
 
@@ -75,14 +72,12 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout_COM_select.addLayout(self.horizontalLayout_COM_Select_btn)
-        self.verticalLayout_COM_select.setStretch(0, 5)
-        self.verticalLayout_COM_select.setStretch(1, 5)
-
+        # self.verticalLayout_COM_select.setStretch(0, 5)
+        # self.verticalLayout_COM_select.setStretch(1, 5)
         # self.horizontalLayout_COM_Select_btn.setStretch(0, 20)
         # self.horizontalLayout_COM_Select_btn.setStretch(1, 3)
         # self.horizontalLayout_COM_Select_btn.setStretch(2, 1)
         self.horizontalLayout_COM_Select_btn.setContentsMargins(10, 10, 10, 10)
-        
         self.verticalLayout_leftside.addWidget(self.GroupBox_hostIP)
 
         #刀把IP位址
@@ -91,10 +86,20 @@ class Ui_MainWindow(object):
         font.setFamily("Arial")
         font.setPointSize(9)
         self.GroupBox_clientIP.setFont(font)
-        self.GroupBox_clientIP.setObjectName("GroupBox_clientIP")
-        self.LineEdit_client = QtWidgets.QLineEdit(self.GroupBox_clientIP)
-        self.LineEdit_client.setGeometry(QtCore.QRect(10, 20, 237, 29))
+        self.GroupBox_clientIP.setObjectName("GroupBox_clientIP")    
+        self.verticalLayoutWidget_6 = QtWidgets.QWidget(self.GroupBox_clientIP)
+        self.verticalLayoutWidget_6.setGeometry(QtCore.QRect(10, 20, 237, 29))
+        self.verticalLayoutWidget_6.setObjectName("verticalLayoutWidget_6")
+        self.verticalLayout_clientIP = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_6)
+        self.verticalLayout_clientIP.setContentsMargins(0, 0, 10, 0)
+        
+        self.verticalLayout_clientIP.setObjectName("verticalLayout_clientIP")
+        self.clientIPLayout = QtWidgets.QVBoxLayout()
+        self.clientIPLayout.setObjectName("clientIPLayout")
+        self.LineEdit_client = QtWidgets.QLineEdit(self.verticalLayoutWidget_6)
         self.LineEdit_client.setObjectName("LineEdit_client")
+        self.clientIPLayout.addWidget(self.LineEdit_client)
+        self.verticalLayout_clientIP.addLayout(self.clientIPLayout)
         self.verticalLayout_leftside.addWidget(self.GroupBox_clientIP)
 
         #顯示設定
