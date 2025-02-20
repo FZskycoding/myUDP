@@ -275,10 +275,11 @@ class SaveThread(QThread):
 
 class WorkerThread_COM(QThread): 
     trigger = pyqtSignal(list)
+    batt_trigger = pyqtSignal(str)
     freq_trigger = pyqtSignal(int)
     def __init__(self):
         super().__init__()
-        self.com = "COM15"
+        self.com = "COM4"
         self.baud = 2000000
         self.frequency = 0
         self.frequency_timer = QtCore.QTimer()# Frequency Timer
@@ -287,6 +288,8 @@ class WorkerThread_COM(QThread):
     def run(self):
         self.doConnect()
         pre_data = ""
+        pre_batt = ""
+        batt = ""
         while True:
             try:
                 # data = self.ser.readline().decode()
@@ -294,10 +297,27 @@ class WorkerThread_COM(QThread):
                 data_list = []
                 
                 if len(data) > 0:
+                    batt_begin_tag = data.find("(")
+                    batt_end_tag = data.find(")")
+                    #print(data)
+                    if batt_begin_tag != -1 and batt_end_tag != -1:
+                        batt = data[batt_begin_tag+1:batt_end_tag]
+                        data = data[:batt_begin_tag] + data[batt_end_tag+1:]
+                        #print(batt)
+                        self.batt_trigger.emit(batt)
+                    elif batt_begin_tag != -1 and batt_end_tag == -1:
+                        pre_batt = data[batt_begin_tag+1:]
+                        data = data[:batt_begin_tag]
+                    elif batt_begin_tag == -1 and batt_end_tag != -1:
+                        batt = pre_batt + data[:batt_end_tag]
+                        data = data[batt_end_tag+1:]
+                        #print(batt)
+                        self.batt_trigger.emit(batt)
+                        pre_batt = ""
                     first_tag = data.find("#")
                     last_tag = data.rfind("#")
                     if first_tag == -1:
-                        pre_data = data
+                        pre_data += data
                     else:
                         if first_tag == 0:
                             data_list.append(pre_data)
@@ -463,6 +483,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
             self.work.start()
             self.work.trigger.connect(self.update_data)
             self.work.freq_trigger.connect(self.frequency_count)
+            self.work.batt_trigger.connect(self.batt_update)
 
         def update_data(self, list_msg):
             global client_ip
@@ -1673,6 +1694,11 @@ class MainWindow_controller(QtWidgets.QMainWindow):
             # self.ui.label_frequency.setText(f"取樣率 : {int(sum(self.frequency_list)/len(self.frequency_list))}")
             if len(self.frequency_list) >= 10:
                 self.frequency_list = []
+        def batt_update(self,batt):
+            batt_list = batt.split(",")
+            self.ui.value_power.setText(f"{batt_list[0]}%")
+            self.ui.value_voltage.setText(f"{batt_list[1]}mV")
+            self.ui.value_current.setText(f"{batt_list[2]}mA")
 def remove_outliers(data, threshold1=0.07, threshold2=0.14):
     """
     去除異常值的函式
